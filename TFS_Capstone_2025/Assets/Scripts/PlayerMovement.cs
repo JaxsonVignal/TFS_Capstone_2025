@@ -93,7 +93,9 @@ public class NewBehaviourScript : MonoBehaviour
         }
 
         //start crouch
-        if (Input.GetKeyDown(crouchKey))
+
+        //change to  modify height instead 
+        if (Input.GetKeyDown(crouchKey) && grounded)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
@@ -110,6 +112,9 @@ public class NewBehaviourScript : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         
+
+        //change to moveplayer
+        //colide and slide for slope detection
         if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
@@ -135,6 +140,8 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void Jump()
     {
+        //look into kin for jumping 
+
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -156,7 +163,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
 
         // sprint state
-        if (grounded && Input.GetKey(sprintKey))
+        else if (grounded && Input.GetKey(sprintKey))
         {
             state = MoveState.sprinting;
             moveSpeed = sprintSpeed;
