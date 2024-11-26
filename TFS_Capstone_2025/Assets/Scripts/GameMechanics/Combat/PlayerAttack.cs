@@ -36,7 +36,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void PlayerInput() //handles input and state, may wish to separate state in the future
     {
-        if (Input.GetKeyDown(attackKey))
+        if (Input.GetKeyDown(attackKey) || Input.GetMouseButtonDown(0))
         {
             isAttacking = true;
             anim.SetTrigger("Attack");
