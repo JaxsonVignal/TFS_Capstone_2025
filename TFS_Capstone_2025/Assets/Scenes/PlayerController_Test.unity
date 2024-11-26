@@ -780,7 +780,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 23430
+    surfaceParameter: 23436
     meshQueryIndex: 0
     subMeshQueryIndex: 0
     geometryHashValue: 2574919030488312270
@@ -866,7 +866,7 @@ MonoBehaviour:
     meshQuery:
       layers: 33554440
       maskAndChannels: 8
-    surfaceParameter: 23436
+    surfaceParameter: 23442
     meshQueryIndex: 1
     subMeshQueryIndex: 0
     geometryHashValue: 2574919030488312270
@@ -5304,8 +5304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4147c2176d1ba4b848fc171a64b500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 400
-  sensY: 400
+  sensX: 700
+  sensY: 700
   orientation: {fileID: 1862599560}
 --- !u!1 &905606181
 GameObject:
@@ -5390,7 +5390,6 @@ MonoBehaviour:
   sprintSpeed: 12
   crouchSpeed: 5
   crouchYScale: 0.5
-  maxSlopeAngle: 40
   orientation: {fileID: 1862599560}
   jumpForce: 8
   jumpCooldown: 0.25
@@ -8488,7 +8487,7 @@ MonoBehaviour:
     meshQuery:
       layers: 33554440
       maskAndChannels: 8
-    surfaceParameter: 23436
+    surfaceParameter: 23442
     meshQueryIndex: 1
     subMeshQueryIndex: 0
     geometryHashValue: 2574919030488312270
