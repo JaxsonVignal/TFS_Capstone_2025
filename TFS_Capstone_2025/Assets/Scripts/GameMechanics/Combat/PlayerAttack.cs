@@ -50,13 +50,20 @@ public class PlayerAttack : MonoBehaviour
             if (attackState == AttackStates.idle)
             {
                 anim.SetTrigger("Attack1");
+                attackState = AttackStates.attack1;
             } else if (attackState == AttackStates.attack1)
             {
                 anim.SetTrigger("Attack2");
+                attackState = AttackStates.attack2;
             } else if (attackState == AttackStates.attack2)
             {
                 anim.SetTrigger("Attack3");
-            }
+                attackState = AttackStates.attack3;
+            } 
+        }
+        else //TODO: update this so it transitions at the end rather than every frame
+        {
+            attackState = AttackStates.idle;
         }
     }
 }
