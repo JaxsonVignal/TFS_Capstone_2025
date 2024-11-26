@@ -17,16 +17,8 @@ public class PlayerAttack : MonoBehaviour
     //[Header("Attack Settings")]
     //attack speed
     //attack interval/reset/cooldown
-    
-    public enum AttackStates
-    {
-        idle,
-        attack1, 
-        attack2,
-        attack3,
-    }
 
-    [SerializeField] private AttackStates attackState;
+    private bool isAttacking;
 
     private void Start()
     {
@@ -46,24 +38,12 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetKeyDown(attackKey))
         {
-            Debug.Log("attack key pressed");
-            if (attackState == AttackStates.idle)
-            {
-                anim.SetTrigger("Attack1");
-                attackState = AttackStates.attack1;
-            } else if (attackState == AttackStates.attack1)
-            {
-                anim.SetTrigger("Attack2");
-                attackState = AttackStates.attack2;
-            } else if (attackState == AttackStates.attack2)
-            {
-                anim.SetTrigger("Attack3");
-                attackState = AttackStates.attack3;
-            } 
+            isAttacking = true;
+            anim.SetTrigger("Attack");
         }
         else //TODO: update this so it transitions at the end rather than every frame
         {
-            attackState = AttackStates.idle;
+            //attackState = AttackStates.idle;
         }
     }
 }
