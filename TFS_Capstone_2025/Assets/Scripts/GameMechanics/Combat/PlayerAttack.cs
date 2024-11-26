@@ -13,7 +13,7 @@ public class PlayerAttack : MonoBehaviour
     
     //[Header ("Animation")]
     [SerializeField] private Animator anim;
-    
+        
     //[Header("Attack Settings")]
     //attack speed
     //attack interval/reset/cooldown
@@ -27,9 +27,13 @@ public class PlayerAttack : MonoBehaviour
         attack4
     }
 
-    public AttackStates attackState;
+    [SerializeField] private AttackStates attackState;
 
-
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
+    
     private void Update()
     {
         PlayerInput();
@@ -41,8 +45,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void PlayerInput() //handles input and state, may wish to separate state in the future
     {
-        if (Input.GetKeyUp(attackKey))
+        if (Input.GetKeyDown(attackKey))
         {
+            Debug.Log("attack key pressed");
             if (attackState == AttackStates.idle)
             {
                 anim.SetTrigger("attack1");
