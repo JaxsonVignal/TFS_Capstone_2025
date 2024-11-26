@@ -8,9 +8,21 @@ public class NewBehaviourScript : MonoBehaviour
     [Header ("Keybinds")]
 
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Player Movement")]
     public float moveSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
+
+    [Header("Crouching Settings")]
+    public float crouchSpeed;
+    public float crouchYScale;
+    private float startYScale;
+
+
+
     public Transform orientation;
     public float jumpForce;
     public float jumpCooldown;
@@ -23,6 +35,16 @@ public class NewBehaviourScript : MonoBehaviour
     Vector3 moveDirection;
     Rigidbody rb;
 
+    public enum MoveState
+    {
+        walking, 
+        sprinting,
+        crouching,
+        air
+    }
+
+    public MoveState state;
+
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask WhatIsGround;
@@ -33,6 +55,8 @@ public class NewBehaviourScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         CanJump = true;
+
+        startYScale = transform.localScale.y;
     }
 
     private void Update()
@@ -41,6 +65,7 @@ public class NewBehaviourScript : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, WhatIsGround);
         MyInput();
         SpeedControl();
+        StateHandler();
 
         //groundDrag settings 
         if (grounded)
@@ -65,6 +90,19 @@ public class NewBehaviourScript : MonoBehaviour
             Jump();
 
             Invoke(nameof(resetJump), jumpCooldown);
+        }
+
+        //start crouch
+        if (Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+
+        //stop crouch 
+        if (Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
     }
 
@@ -106,5 +144,35 @@ public class NewBehaviourScript : MonoBehaviour
     {
         CanJump = true;
     }
-    
+
+    private void StateHandler()
+    {
+
+        //crouch state
+        if(Input.GetKey(crouchKey))
+        {
+            state = MoveState.crouching;
+            moveSpeed = crouchSpeed;
+        }
+
+        // sprint state
+        if (grounded && Input.GetKey(sprintKey))
+        {
+            state = MoveState.sprinting;
+            moveSpeed = sprintSpeed;
+        }
+
+        // walking state
+        else if (grounded)
+        {
+            state = MoveState.walking;
+            moveSpeed = walkSpeed;
+        }
+
+        //air state
+        else
+        {
+            state = MoveState.air;
+        }
+    }
 }
