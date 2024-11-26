@@ -50,16 +50,16 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("attack key pressed");
             if (attackState == AttackStates.idle)
             {
-                anim.SetTrigger("attack1");
+                anim.SetTrigger("Attack1");
             } else if (attackState == AttackStates.attack1)
             {
-                anim.SetTrigger("attack2");
+                anim.SetTrigger("Attack2");
             } else if (attackState == AttackStates.attack2)
             {
-                anim.SetTrigger("attack3");
+                anim.SetTrigger("Attack3");
             } else if (attackState == AttackStates.attack3)
             {
-                anim.SetTrigger("attack4");
+                anim.SetTrigger("Attack4");
             }
         }
     }
