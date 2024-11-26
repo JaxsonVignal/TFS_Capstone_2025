@@ -24,7 +24,6 @@ public class PlayerAttack : MonoBehaviour
         attack1, 
         attack2,
         attack3,
-        attack4
     }
 
     [SerializeField] private AttackStates attackState;
@@ -57,9 +56,6 @@ public class PlayerAttack : MonoBehaviour
             } else if (attackState == AttackStates.attack2)
             {
                 anim.SetTrigger("Attack3");
-            } else if (attackState == AttackStates.attack3)
-            {
-                anim.SetTrigger("Attack4");
             }
         }
     }
