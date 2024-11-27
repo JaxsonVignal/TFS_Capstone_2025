@@ -21,8 +21,12 @@ public class NewBehaviourScript : MonoBehaviour
     public float crouchYScale;
     private float startYScale;
 
+    [Header("Slope Settings")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
 
+    [Header("Jump Settings")]
     public Transform orientation;
     public float jumpForce;
     public float jumpCooldown;
@@ -111,6 +115,13 @@ public class NewBehaviourScript : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        //on slope
+
+        if (onSlope())
+        {
+            rb.AddForce(GetSlopeDirection() * moveSpeed  * 10f, ForceMode.Force);
+        }
         
 
         //change to moveplayer
@@ -181,5 +192,22 @@ public class NewBehaviourScript : MonoBehaviour
         {
             state = MoveState.air;
         }
+    }
+
+    private bool onSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * .5f + .3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 }
