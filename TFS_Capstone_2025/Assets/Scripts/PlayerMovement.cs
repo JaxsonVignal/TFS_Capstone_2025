@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PlayerMovement: MonoBehaviour
 {
 
     [Header ("Keybinds")]
@@ -15,6 +15,13 @@ public class NewBehaviourScript : MonoBehaviour
     public float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
+    public float slideSpeed;
+    public float wallrunSpeed;
+    private float desiredSpeed;
+    private float lastDesiredSpeed;
+
+    public float speedIncreaseMultiplier;
+    public float slopeIncreaseMultiplier;
 
     [Header("Crouching Settings")]
     public float crouchSpeed;
@@ -44,9 +51,13 @@ public class NewBehaviourScript : MonoBehaviour
         walking, 
         sprinting,
         crouching,
+        sliding,
+        wallrunning,
         air
     }
 
+    public bool sliding;
+    public bool wallrunning;
     public MoveState state;
 
     [Header("Ground Check")]
@@ -120,7 +131,7 @@ public class NewBehaviourScript : MonoBehaviour
 
         if (onSlope())
         {
-            rb.AddForce(GetSlopeDirection() * moveSpeed  * 10f, ForceMode.Force);
+            rb.AddForce(GetSlopeDirection(moveDirection) * moveSpeed  * 10f, ForceMode.Force);
         }
         
 
@@ -165,26 +176,50 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void StateHandler()
     {
+        //wallrunning state
 
-        //crouch state
-        if(Input.GetKey(crouchKey))
+        if (wallrunning) 
         {
-            state = MoveState.crouching;
-            moveSpeed = crouchSpeed;
+            state = MoveState.wallrunning;
+            desiredSpeed = wallrunSpeed;
         }
 
-        // sprint state
-        else if (grounded && Input.GetKey(sprintKey))
+
+        // slide state
+        else if (sliding)
+        {
+            state = MoveState.sliding;
+
+            if(onSlope() && rb.velocity.y < 0.1f)
+            {
+                desiredSpeed = slideSpeed;
+            }
+
+            else
+            {
+                desiredSpeed = sprintSpeed;
+            }
+        }
+
+        //crouch state
+        else if(Input.GetKey(crouchKey))
+        {
+            state = MoveState.crouching;
+            desiredSpeed = crouchSpeed;
+        }
+
+        // sprint state (make sure the player cant enter sprint state while crouching, causes acceleration issues)
+        else if (grounded && Input.GetKey(sprintKey) && state != MoveState.crouching)
         {
             state = MoveState.sprinting;
-            moveSpeed = sprintSpeed;
+            desiredSpeed = sprintSpeed;
         }
 
         // walking state
         else if (grounded)
         {
             state = MoveState.walking;
-            moveSpeed = walkSpeed;
+            desiredSpeed = walkSpeed;
         }
 
         //air state
@@ -192,9 +227,23 @@ public class NewBehaviourScript : MonoBehaviour
         {
             state = MoveState.air;
         }
+
+
+        //acceleration hndling 
+        if(Mathf.Abs(desiredSpeed - lastDesiredSpeed) > 4f && moveSpeed != 0 && state != MoveState.crouching)
+        {
+            StopAllCoroutines();
+            StartCoroutine(acceleration());
+        }
+        else
+        {
+            moveSpeed = desiredSpeed;
+        }
+
+        lastDesiredSpeed = desiredSpeed;
     }
 
-    private bool onSlope()
+    public bool onSlope()
     {
         if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * .5f + .3f))
         {
@@ -206,8 +255,38 @@ public class NewBehaviourScript : MonoBehaviour
         return false;
     }
 
-    private Vector3 GetSlopeDirection()
+    public Vector3 GetSlopeDirection(Vector3 direction)
     {
-        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+    private IEnumerator acceleration()
+    {
+        float time = 0;
+        float difference = Mathf.Abs(desiredSpeed - moveSpeed);
+        float startValue = moveSpeed;
+
+        while (time < difference) 
+        { 
+            moveSpeed = Mathf.Lerp(startValue, desiredSpeed, time / difference);
+
+            if (onSlope()) 
+            {
+                float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
+                float slopeAngleIncrease = 1 + (slopeAngle / 90f);
+
+                time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultiplier * slopeAngleIncrease;
+            }
+
+            else
+            {
+                time += Time.deltaTime * speedIncreaseMultiplier;
+            }
+           
+            yield return null;
+        }
+
+        moveSpeed = desiredSpeed;
+
     }
 }
