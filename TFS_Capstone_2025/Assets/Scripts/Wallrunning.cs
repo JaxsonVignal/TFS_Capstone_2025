@@ -8,11 +8,15 @@ public class Wallrunning : MonoBehaviour
     public LayerMask whatIsGround;
     public LayerMask whatIsWall;
 
+    public float wallJumpUpForce;
+    public float wallJumpSideForce;
+
     public float wallrunForce;
     public float maxWallrunTime;
     private float wallrunTimer;
 
     [Header("inputs")]
+    public KeyCode jumpKey = KeyCode.Space;
     private float horizaontalInput;
     private float verticalInput;
 
@@ -74,6 +78,11 @@ public class Wallrunning : MonoBehaviour
             {
                 startWallrun();
             }
+
+            if (Input.GetKeyDown(jumpKey))
+            {
+                WallJump();
+            }
            
         }
 
@@ -112,11 +121,28 @@ public class Wallrunning : MonoBehaviour
 
         //add wall run force
         rb.AddForce(wallForward * wallrunForce, ForceMode.Force);
+
+        //push into wall if holding A or D for cureved walls
+
+        if(!(wallLeft && horizaontalInput > 0) && !(wallRight && horizaontalInput < 0))
+        {
+            rb.AddForce(-wallNormal * 100, ForceMode.Force);
+        }
     }
 
     private void stopWallrun()
     {
         pm.wallrunning = false;
         rb.useGravity = true; // Re-enable gravity when the wallrun stops.
+    }
+
+    private void WallJump()
+    {
+        Vector3 wallNormal = wallRight ? RightWallHit.normal : LeftWallHit.normal;
+
+        Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
+
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(forceToApply, ForceMode.Impulse);
     }
 }
