@@ -101,7 +101,7 @@ public class PlayerMovement: MonoBehaviour
         {
             
 
-            rb.AddForce(Physics.gravity * Mathf.Lerp(1f, gravityMult, 2f));
+            rb.AddForce(Physics.gravity * Mathf.Lerp(1f, gravityMult, 5f));
         }
     }
 
