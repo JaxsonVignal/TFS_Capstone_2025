@@ -38,6 +38,9 @@ public class PlayerMovement: MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float coyoteTime;
+    public float gravityMult;
+    private float coyoteTimeCounter;
     bool CanJump;
 
     public float groundDrag;
@@ -63,7 +66,7 @@ public class PlayerMovement: MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask WhatIsGround;
-    bool grounded;
+    public bool grounded;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,9 +87,22 @@ public class PlayerMovement: MonoBehaviour
 
         //groundDrag settings 
         if (grounded)
+        {
             rb.drag = groundDrag;
+            coyoteTimeCounter = coyoteTime;
+        }
         else
+        {
             rb.drag = 0;
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if(state == MoveState.air && rb.velocity.y <= 0)
+        {
+            
+
+            rb.AddForce(Physics.gravity * Mathf.Lerp(1f, gravityMult, 2f));
+        }
     }
 
     private void FixedUpdate()
@@ -99,7 +115,7 @@ public class PlayerMovement: MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetKey(jumpKey) && CanJump && grounded){
+        if(Input.GetKey(jumpKey) && CanJump && coyoteTimeCounter > 0f) {
 
             CanJump = false;
             Jump();
@@ -167,6 +183,7 @@ public class PlayerMovement: MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        coyoteTimeCounter = 0f;
     }
 
     private void resetJump()

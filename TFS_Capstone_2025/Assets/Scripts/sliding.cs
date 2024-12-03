@@ -17,6 +17,8 @@ public class sliding : MonoBehaviour
     public float maxSlideTime;
     public float slideForce;
     private float slideTimer;
+    public float slideCooldown;
+    private float slideCooldownCounter;
 
     public float slideYScale;
     private float startYScale;
@@ -34,6 +36,7 @@ public class sliding : MonoBehaviour
         pm = GetComponent<PlayerMovement>();
 
         startYScale = Player.localScale.y;
+        slideCooldownCounter = 0;
     }
 
     private void Update()
@@ -44,7 +47,17 @@ public class sliding : MonoBehaviour
         //W and S keys 
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0)) 
+        if (!pm.sliding)
+        {
+            slideCooldownCounter += Time.deltaTime;
+        }
+
+        else
+        {
+            slideCooldownCounter = 0;
+        }
+
+        if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0) && pm.grounded && slideCooldownCounter >= slideCooldown) 
         {
             startSlide();
         }

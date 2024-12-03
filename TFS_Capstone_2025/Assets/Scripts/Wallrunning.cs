@@ -28,10 +28,16 @@ public class Wallrunning : MonoBehaviour
     private bool wallLeft;
     private bool wallRight;
 
+    [Header("Exiting")]
+    private bool exitingWall;
+    public float exitWallTime;
+    private float exitWallTimer;
+
     [Header("References")]
     public Transform orientation;
     private PlayerMovement pm;
     private Rigidbody rb;
+    public PlayerCam cam;
 
     private void Start()
     {
@@ -72,11 +78,22 @@ public class Wallrunning : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         //wallrunning
-        if ((wallLeft || wallRight) && verticalInput > 0 && isOffGround())
+        if ((wallLeft || wallRight) && verticalInput > 0 && isOffGround() && !exitingWall)
         {
             if (!pm.wallrunning) 
             {
                 startWallrun();
+            }
+
+            if(wallrunTimer > 0)
+            {
+                wallrunTimer -= Time.deltaTime;
+            }
+
+            if(wallrunTimer <= 0 && pm.wallrunning)
+            {
+                exitingWall = true;
+                exitWallTimer = exitWallTime;
             }
 
             if (Input.GetKeyDown(jumpKey))
@@ -85,6 +102,27 @@ public class Wallrunning : MonoBehaviour
             }
            
         }
+
+        // exiting wallrun 
+
+        else if (exitingWall)
+        {
+            if (pm.wallrunning)
+            {
+                stopWallrun();
+            }
+
+            if(exitWallTimer > 0)
+            {
+                exitWallTimer -= Time.deltaTime;
+            }
+
+            if(exitWallTimer <= 0)
+            {
+                exitingWall = false;
+            }
+        }
+
 
         else
         {
@@ -99,6 +137,19 @@ public class Wallrunning : MonoBehaviour
     private void startWallrun()
     {
         pm.wallrunning = true;
+
+        wallrunTimer = maxWallrunTime;
+
+        cam.FOV(90f);
+
+        if (wallLeft)
+        {
+            cam.tilt(-5f);
+        }
+        if (wallRight)
+        {
+            cam.tilt(5f);
+        }
     }
 
     private void wallrunningMovement()
@@ -134,10 +185,17 @@ public class Wallrunning : MonoBehaviour
     {
         pm.wallrunning = false;
         rb.useGravity = true; // Re-enable gravity when the wallrun stops.
+
+        cam.FOV(80f);
+        cam.tilt(0f);
     }
 
     private void WallJump()
     {
+        //exit wall
+        exitingWall = true;
+        exitWallTimer = exitWallTime;
+
         Vector3 wallNormal = wallRight ? RightWallHit.normal : LeftWallHit.normal;
 
         Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
