@@ -40,6 +40,7 @@ public class PlayerAttack : MonoBehaviour
         {
             isAttacking = true;
             anim.SetTrigger("Attack");
+            Debug.Log("attack");
         }
         else //TODO: update this so it transitions at the end rather than every frame
         {

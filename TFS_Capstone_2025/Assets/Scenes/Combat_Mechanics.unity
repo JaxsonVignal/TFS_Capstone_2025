@@ -651,8 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackKey: 308
-  anim: {fileID: 0}
-  attackState: 0
+  anim: {fileID: 1758644265}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
