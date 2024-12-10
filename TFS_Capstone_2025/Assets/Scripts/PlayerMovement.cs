@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class NewBehaviourScript : MonoBehaviour
 {
 
     [Header ("Keybinds")]
@@ -21,8 +21,12 @@ public class PlayerMovement : MonoBehaviour
     public float crouchYScale;
     private float startYScale;
 
+    [Header("Slope Settings")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
 
+    [Header("Jump Settings")]
     public Transform orientation;
     public float jumpForce;
     public float jumpCooldown;
@@ -93,7 +97,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //start crouch
-        if (Input.GetKeyDown(crouchKey))
+
+        //change to  modify height instead 
+        if (Input.GetKeyDown(crouchKey) && grounded)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
@@ -109,7 +115,17 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        //on slope
+
+        if (onSlope())
+        {
+            rb.AddForce(GetSlopeDirection() * moveSpeed  * 10f, ForceMode.Force);
+        }
         
+
+        //change to moveplayer
+        //colide and slide for slope detection
         if(grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
@@ -135,6 +151,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+        //look into kin for jumping 
+
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -156,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // sprint state
-        if (grounded && Input.GetKey(sprintKey))
+        else if (grounded && Input.GetKey(sprintKey))
         {
             state = MoveState.sprinting;
             moveSpeed = sprintSpeed;
@@ -174,5 +192,22 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MoveState.air;
         }
+    }
+
+    private bool onSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * .5f + .3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 }

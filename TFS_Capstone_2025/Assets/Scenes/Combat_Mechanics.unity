@@ -541,7 +541,7 @@ PrefabInstance:
       addedObject: {fileID: 1758644265}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0d8168335a432d4498d24e97895da96a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1758644268}
+      addedObject: {fileID: 1758644267}
   m_SourcePrefab: {fileID: 100100000, guid: 0d8168335a432d4498d24e97895da96a, type: 3}
 --- !u!1 &1758644260 stripped
 GameObject:
@@ -583,6 +583,7 @@ MonoBehaviour:
   sprintSpeed: 2
   crouchSpeed: 1
   crouchYScale: 0
+  maxSlopeAngle: 0
   orientation: {fileID: 768064039}
   jumpForce: 0
   jumpCooldown: 0
@@ -654,8 +655,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackKey: 308
-  anim: {fileID: 1758644265}
---- !u!114 &1758644268
+  anim: {fileID: 0}
+--- !u!114 &1758644267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
