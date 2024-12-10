@@ -43,8 +43,7 @@ public class EnemyController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {        
     }
 
     // Example method to simulate taking damage

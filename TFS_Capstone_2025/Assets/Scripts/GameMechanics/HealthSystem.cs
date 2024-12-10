@@ -12,10 +12,15 @@ public class HealthSystem : MonoBehaviour
     public UnityEvent onHealthChanged;
     public UnityEvent onDeath;
 
+    private void Awake()
+    {
+        // Initialize health - must be set before start
+        currentHealth = maxHealth;
+    }
+
     private void Start()
     {
-        // Initialize health
-        currentHealth = maxHealth;
+
     }
 
     // Method to deal damage
