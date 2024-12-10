@@ -6284,7 +6284,7 @@ MonoBehaviour:
   sprintKey: 304
   crouchKey: 99
   moveSpeed: 0
-  walkSpeed: 8
+  walkSpeed: 10
   sprintSpeed: 10
   slideSpeed: 30
   wallrunSpeed: 10
@@ -6302,6 +6302,7 @@ MonoBehaviour:
   groundDrag: 8
   sliding: 0
   wallrunning: 0
+  hitJumpPad: 0
   state: 0
   playerHeight: 2
   WhatIsGround:
@@ -6348,11 +6349,11 @@ MonoBehaviour:
   wallJumpUpForce: 8
   wallJumpSideForce: 12
   wallrunForce: 200
-  maxWallrunTime: 1
+  maxWallrunTime: 1.5
   jumpKey: 32
   wallCheckDistance: 0.7
   minJumpHeight: 1.5
-  exitWallTime: 0.3
+  exitWallTime: 0.5
   orientation: {fileID: 1862599560}
   cam: {fileID: 817942784}
 --- !u!1 &928521158
