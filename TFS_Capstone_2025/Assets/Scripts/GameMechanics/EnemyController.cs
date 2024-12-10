@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     
     private HealthSystem healthSystem; //system for tracking health and damage
     private GameObject healthSlider; //healthSlider Prefab to instantiate 
-    [SerializeField] private GameObject healthSliderAttachPoint; //location to attach healthSlider prefab
+    [SerializeField] private GameObject healthSliderAttachPoint; //location to attach healthSlider prefab - could replace with tag and find in children
     private Slider uiHealthSliderBar; //portion of health slider to update with current health
     [SerializeField] private string healthSliderTag = "SliderBar";
 
