@@ -6,6 +6,9 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
 
+    public Transform WeaponHitbox;
+    public Transform WeaponHitboxAttachPoint;
+
     //commented headers due to error: 
     //Attribute 'Header' is not valid on this declaration type. It is only valid on 'field' declarations.
     //[Header ("Keybinds")]

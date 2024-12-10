@@ -14,6 +14,8 @@ public class EnemyController : MonoBehaviour
     private Slider uiHealthSliderBar; //portion of health slider to update with current health
     [SerializeField] private string healthSliderTag = "SliderBar";
 
+
+
     // Start is called before the first frame update
     void Start()
     {
