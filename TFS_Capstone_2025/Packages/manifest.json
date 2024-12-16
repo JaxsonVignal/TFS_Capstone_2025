@@ -1,6 +1,10 @@
 {
   "dependencies": {
+ Main-Menu
     "com.unity.2d.sprite": "1.0.0",
+
+    "com.unity.burst": "1.8.18",
+ main
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.7",
