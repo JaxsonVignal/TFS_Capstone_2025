@@ -1,5 +1,12 @@
 {
   "dependencies": {
+ Main-Menu
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+
     "com.unity.burst": {
       "version": "1.8.18",
       "depth": 0,
@@ -9,6 +16,7 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+main
     },
     "com.unity.collab-proxy": {
       "version": "2.5.2",
