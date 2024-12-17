@@ -48,6 +48,15 @@ public class EnemyController : MonoBehaviour
     {        
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Enemy took damage");
+            healthSystem.TakeDamage(50f);
+        }
+    }
+
     // Example method to simulate taking damage
     public void SimulateDamage()
     {
@@ -59,6 +68,7 @@ public class EnemyController : MonoBehaviour
     {
         // Handle enemy death (e.g., play death animation, destroy enemy)
         Debug.Log("Enemy has died!");
+        Destroy(gameObject);
     }
 
     void OnHealthChanged()
