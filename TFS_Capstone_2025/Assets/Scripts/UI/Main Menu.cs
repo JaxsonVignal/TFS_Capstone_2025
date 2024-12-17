@@ -5,9 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    void Start()
+    {
+        // Unlock and show the cursor at the start of the game
+        Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
+        Cursor.visible = true;                   // Make the cursor visible
+    }
+
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync("PlayerController_Test");
+        SceneManager.LoadSceneAsync("TestLevel");
     }
 
     public void QuitGame()

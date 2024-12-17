@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))] 
+//[RequireComponent(typeof(Animator))] 
 public class PlayerAttack : MonoBehaviour
 {
+
+    public Transform WeaponHitbox;
+    public Transform WeaponHitboxAttachPoint;
 
     //commented headers due to error: 
     //Attribute 'Header' is not valid on this declaration type. It is only valid on 'field' declarations.
@@ -22,7 +25,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
     
     private void Update()
@@ -40,6 +43,7 @@ public class PlayerAttack : MonoBehaviour
         {
             isAttacking = true;
             anim.SetTrigger("Attack");
+            Debug.Log("attack");
         }
         else //TODO: update this so it transitions at the end rather than every frame
         {
